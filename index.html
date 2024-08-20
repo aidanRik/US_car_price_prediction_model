@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Used Car Price Prediction Model</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #4a90e2;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        .slider-output {
+            text-align: center;
+            margin-top: 5px;
+            color: #888;
+        }
+        select, input[type="range"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: #fafafa;
+            margin-bottom: 10px;
+        }
+        .form-actions {
+            text-align: center;
+        }
+        button {
+            background-color: #4a90e2;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #357abd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Used Car Price Prediction Model</h1>
+    <div class="form-group">
+        <label for="price">Price (US Dollar $):</label>
+        <input type="range" id="price" name="price" min="0" max="300000" step="1000" value="150000" oninput="updatePriceOutput(this.value)">
+        <div class="slider-output" id="price-output">$300,000</div>
+    </div>
+
+    <div class="form-group">
+        <label for="condition">Condition:</label>
+        <select id="condition" name="condition">
+            <option value="new">New</option>
+            <option value="used">Poor</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="year">Year:</label>
+        <select id="year" name="year">
+            <script>
+                for (let i = 2024; i >= 1990; i--) {
+                    document.write('<option value="' + i + '">' + i + '</option>');
+                }
+            </script>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="brand">Brand:</label>
+        <select id="brand" name="brand" onchange="updateModels()">
+            <option value="mazda">Mazda</option>
+            <option value="jaguar">Jaguar</option>
+            <option value="land-rover">Land Rover</option>
+            <option value="porsche">Porsche</option>
+            <option value="volvo">Volvo</option>
+            <option value="chevrolet">Chevrolet</option>
+            <option value="ford">Ford</option>
+            <option value="hyundai">Hyundai</option>
+            <option value="tesla">Tesla</option>
+            <option value="lexus">Lexus</option>
+            <option value="mercedes-benz">Mercedes-Benz</option>
+            <option value="subaru">Subaru</option>
+            <option value="volkswagen">Volkswagen</option>
+            <option value="audi">Audi</option>
+            <option value="honda">Honda</option>
+            <option value="jeep">Jeep</option>
+            <option value="bmw">BMW</option>
+            <option value="nissan">Nissan</option>
+            <option value="kia">Kia</option>
+            <option value="toyota">Toyota</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="model">Model:</label>
+        <select id="model" name="model">
+            <!-- Models will be updated based on brand selection -->
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="mileage">Mileage (miles):</label>
+        <input type="range" id="mileage" name="mileage" min="0" max="250000" step="5000" value="125000" oninput="updateMileageOutput(this.value)">
+        <div class="slider-output" id="mileage-output">125,000 miles</div>
+    </div>
+
+    <div class="form-group">
+        <label for="color">Color:</label>
+        <select id="color" name="color">
+            <option value="black">Black</option>
+            <option value="white">White</option>
+            <option value="red">Red</option>
+            <option value="blue">Blue</option>
+            <option value="silver">Silver</option>
+            <option value="gray">Gray</option>
+            <option value="green">Green</option>
+        </select>
+    </div>
+
+
+    <div class="form-actions">
+        <button type="submit">Predict Price</button>
+    </div>
+</div>
+
+<script>
+    function updatePriceOutput(value) {
+        document.getElementById('price-output').textContent = '$' + parseInt(value).toLocaleString();
+    }
+
+    function updateMileageOutput(value) {
+        document.getElementById('mileage-output').textContent = parseInt(value).toLocaleString() + ' miles';
+    }
+
+    function updateModels() {
+        const brand = document.getElementById('brand').value;
+        const modelSelect = document.getElementById('model');
+        modelSelect.innerHTML = ''; // Clear existing options
+
+        let models = [];
+        switch (brand) {
+            case 'mazda':
+                models = ['Mazda3', 'CX-5', 'Mazda6'];
+                break;
+            case 'jaguar':
+                models = ['XF', 'F-Pace', 'XJ'];
+                break;
+            case 'land-rover':
+                models = ['Range Rover', 'Discovery', 'Defender'];
+                break;
+            case 'porsche':
+                models = ['911', 'Cayenne', 'Macan'];
+                break;
+            case 'volvo':
+                models = ['XC90', 'S60', 'XC60'];
+                break;
+            case 'chevrolet':
+                models = ['Silverado', 'Equinox', 'Malibu'];
+                break;
+            case 'ford':
+                models = ['F-150', 'Mustang', 'Explorer'];
+                break;
+            case 'hyundai':
+                models = ['Elantra', 'Santa Fe', 'Tucson'];
+                break;
+            case 'tesla':
+                models = ['Model S', 'Model 3', 'Model X'];
+                break;
+            case 'lexus':
+                models = ['RX', 'ES', 'NX'];
+                break;
+            case 'mercedes-benz':
+                models = ['C-Class', 'E-Class', 'GLC'];
+                break;
+            case 'subaru':
+                models = ['Outback', 'Forester', 'Crosstrek'];
+                break;
+            case 'volkswagen':
+                models = ['Golf', 'Passat', 'Tiguan'];
+                break;
+            case 'audi':
+                models = ['A4', 'Q5', 'A6'];
+                break;
+            case 'honda':
+                models = ['Civic', 'Accord', 'CR-V'];
+                break;
+            case 'jeep':
+                models = ['Wrangler', 'Grand Cherokee', 'Cherokee'];
+                break;
+            case 'bmw':
+                models = ['3 Series', 'X5', '5 Series'];
+                break;
+            case 'nissan':
+                models = ['Altima', 'Rogue', 'Sentra'];
+                break;
+            case 'kia':
+                models = ['Sorento', 'Soul', 'Sportage'];
+                break;
+            case 'toyota':
+                models = ['Camry', 'Corolla', 'Highlander'];
+    }
+    // Populate model options
+    models.forEach(function(model) {
+            const option = document.createElement('option');
+            option.value = model.toLowerCase().replace(/\s+/g, '-');
+            option.textContent = model;
+            modelSelect.appendChild(option);
+        });
+    }
+
+    // Initialize with first brand's models
+    updateModels();
+</script>
+
+</body>
+</html>
