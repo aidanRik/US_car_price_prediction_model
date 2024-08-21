@@ -15,6 +15,9 @@ def Home():
 @app.route("/predict", methods=['POST'])
 def predict():
     if request.method == 'POST':
+        # Get Original Price
+        Price = float(request.form['price'])
+
         # Get Year
         Year = int(request.form['year'])
         Year = 2024 - Year  # Car age calculation based on 2024
@@ -34,7 +37,7 @@ def predict():
         Color_num = color_mapping.get(Color, -1)
 
         # Predict the price using the model
-        prediction = model.predict([[Year, Mileage_log, Color_num, Condition_num]])
+        prediction = model.predict([[Price, Year, Color_num, Mileage_log, Condition_num]])
 
         # Format the output
         output = round(prediction[0], 2)
