@@ -10,6 +10,7 @@ model = pickle.load(open('price_prediction_model.pkl', 'rb'))
 
 @app.route('/', methods=['GET'])
 def Home():
+    print()
     return render_template('index.html')
 
 @app.route("/predict", methods=['POST'])
