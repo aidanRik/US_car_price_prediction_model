@@ -6,10 +6,11 @@ from sklearn.preprocessing import StandardScaler
 app = Flask(__name__)
 
 # Load the saved model
-model = pickle.load(open('price_prediction_model.pkl', 'rb'))
+model = pickle.load(open('random_forest_regression_model.pkl', 'rb'))
 
 @app.route('/', methods=['GET'])
 def Home():
+    print()
     return render_template('index.html')
 
 @app.route("/predict", methods=['POST'])
